@@ -48,9 +48,10 @@ static int resolve_hook_address(struct ftrace_hook *hook)
   return 0;
 }
 
-static void notrace fh_trace_thunk(unsigned long ip, unsigned long parent_ip, struct ftrace_ops *ops, struct pt_regs *regs)
+static void notrace fh_trace_thunk(unsigned long ip, unsigned long parent_ip, struct ftrace_ops *ops, struct ftrace_regs *fregs)
 {
   struct ftrace_hook *hook = to_ftrace_hook(ops);
+  struct pt_regs *regs = ftrace_get_regs(fregs);
 
   if (!within_module(parent_ip, THIS_MODULE))
     regs->ip = (unsigned long)hook->function;
